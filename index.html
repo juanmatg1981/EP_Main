@@ -83,15 +83,22 @@
 	.tree details[open] > summary::before{
 	  content : '−';
 	}
+	   
+	  .container {width:calc(100% - 500px);}
+		.toc {position:fixed;top:0;left:0;font-size:small;padding:10px 20px;width:170px;border-right:solid 2px #eeeeee;bottom:0;}
+	figcaption {text-align:center;}
    </style>
     
    </head>
    <body>
-      	<div class="divtree">
+	<div class="toc">
+	<h2>Table of Contents</h2>
+      		<div class="divtree">
+		
 		<ul class="tree">
 		  <li>
 		    <details open>
-		      <summary>Main Content</summary>
+		      <summary>Contents</summary>
 		      <ul>
 			<li>
 			  <details>
@@ -113,7 +120,8 @@
 		    </details>
 		  </li>
 		</ul>
-	   </div>
+	  </div>
+	 </div>
 	   <div class="container">
 	   </div>
 	
