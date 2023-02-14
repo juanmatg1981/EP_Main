@@ -90,8 +90,13 @@
    </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-$('#content').load($('.nav a').prop('href'));
-    </script> 
+$(document).ready(function() {
+  $('#tree a').click(function(e) {
+   e.preventDefault();
+   $('#content').load($(this).attr('href'));
+  });
+ });
+</script> 
    </head>
    <body>
 	<div class="toc">
