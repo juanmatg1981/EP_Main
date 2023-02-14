@@ -90,14 +90,10 @@
    </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-$(function(){
-		$('#nav a').click(function(e) { 
-			  $('#content').hide().load( $(this).attr('href') , function(){
-					 $('#content').show()
-			  })
-			  return false
-		})
-	})
+$(document).ready(function() {  
+  var data = $("a#nav").attr("href");
+  $('#content').html(data);
+});
     </script> 
    </head>
    <body>
