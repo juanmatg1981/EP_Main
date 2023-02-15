@@ -4,130 +4,66 @@
    
 <title>Main Project EP Data</title>   
    <style type="text/css">
-	body {
-  margin: 30px;
-  font-family: sans-serif;
-  }
-
-#fontSizeWrapper { font-size: 16px; }
-
-#fontSize {
-  width: 100px;
-  font-size: 1em;
-  }
-
-/* ————————————————————–
-  Tree core styles
-*/
-.tree { margin: 1em; }
-
-.tree input {
-  position: absolute;
-  clip: rect(0, 0, 0, 0);
-  }
-
-.tree input ~ ul { display: none; }
-
-.tree input:checked ~ ul { display: block; }
-
-/* ————————————————————–
-  Tree rows
-*/
+	
+.tree {
+    min-height:20px;
+    padding:19px;
+    margin-bottom:20px;
+    background-color:#fbfbfb;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius:4px;
+    -webkit-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    -moz-box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05);
+    box-shadow:inset 0 1px 1px rgba(0, 0, 0, 0.05)
+}
 .tree li {
-  line-height: 1.2;
-  position: relative;
-  padding: 0 0 1em 1em;
-  }
-
-.tree ul li { padding: 1em 0 0 1em; }
-
-.tree > li:last-child { padding-bottom: 0; }
-
-/* ————————————————————–
-  Tree labels
-*/
-.tree_label {
-  position: relative;
-  display: inline-block;
-  background: #fff;
-  }
-
-label.tree_label { cursor: pointer; }
-
-label.tree_label:hover { color: #666; }
-
-/* ————————————————————–
-  Tree expanded icon
-*/
-label.tree_label:before {
-  background: #000;
-  color: #fff;
-  position: relative;
-  z-index: 1;
-  float: left;
-  margin: 0 1em 0 -2em;
-  width: 1em;
-  height: 1em;
-  border-radius: 1em;
-  content: '+';
-  text-align: center;
-  line-height: .9em;
-  }
-
-:checked ~ label.tree_label:before { content: '–'; }
-
-/* ————————————————————–
-  Tree branches
-*/
-.tree li:before {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: -.5em;
-  display: block;
-  width: 0;
-  border-left: 1px solid #777;
-  content: "";
-  }
-
-.tree_label:after {
-  position: absolute;
-  top: 0;
-  left: -1.5em;
-  display: block;
-  height: 0.5em;
-  width: 1em;
-  border-bottom: 1px solid #777;
-  border-left: 1px solid #777;
-  border-radius: 0 0 0 .3em;
-  content: '';
-  }
-
-label.tree_label:after { border-bottom: 0; }
-
-:checked ~ label.tree_label:after {
-  border-radius: 0 .3em 0 0;
-  border-top: 1px solid #777;
-  border-right: 1px solid #777;
-  border-bottom: 0;
-  border-left: 0;
-  bottom: 0;
-  top: 0.5em;
-  height: auto;
-  }
-
-.tree li:last-child:before {
-  height: 1em;
-  bottom: auto;
-  }
-
-.tree > li:last-child:before { display: none; }
-
-.tree_custom {
-  display: block;
-  background: #eee;
-  padding: 1em;
-  border-radius: 0.3em;
+    list-style-type:none;
+    margin:0;
+    padding:10px 5px 0 5px;
+    position:relative
+}
+.tree li::before, .tree li::after {
+    content:'';
+    left:-20px;
+    position:absolute;
+    right:auto
+}
+.tree li::before {
+    border-left:1px solid #999;
+    bottom:50px;
+    height:100%;
+    top:0;
+    width:1px
+}
+.tree li::after {
+    border-top:1px solid #999;
+    height:20px;
+    top:30px;
+    width:25px
+}
+.tree li span {
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+    border:1px solid #999;
+    border-radius:5px;
+    display:inline-block;
+    padding:3px 8px;
+    text-decoration:none
+}
+.tree li.parent_li>span {
+    cursor:pointer
+}
+.tree>ul>li::before, .tree>ul>li::after {
+    border:0
+}
+.tree li:last-child::before {
+    height:30px
+}
+.tree li.parent_li>span:hover, .tree li.parent_li>span:hover+ul li span {
+    background:#eee;
+    border:1px solid #94a0b4;
+    color:#000
 }
 	   
 	  .container {position:fixed;top:0;left:250;font-size:small;padding:10px 20px;width:250px;border-right:solid 2px #eeeeee;bottom:0;}
@@ -136,78 +72,49 @@ label.tree_label:after { border-bottom: 0; }
    </style>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-function isNumber(n) {
-  return !isNaN(parseFloat(n)) && isFinite(n);
-}
+$(function () {
+      $('.tree li:has(ul)').addClass('parent_li').find(' > span').attr('title', 'Collapse this branch');
+      $('.tree li.parent_li > span').on('click', function (e) {
+          var children = $(this).parent('li.parent_li').find(' > ul > li');
+          if (children.is(":visible")) {
+              children.hide('fast');
+              $(this).attr('title', 'Expand this branch').find(' > i').addClass('fa-plus-square').removeClass('fa-minus-square');
+          } else {
+              children.show('fast');
+              $(this).attr('title', 'Collapse this branch').find(' > i').addClass('fa-minus-square').removeClass('fa-plus-square');
+          }
+          e.stopPropagation();
+      });
+  });
 
-function setFontSize(el) {
-    var fontSize = el.val();
-    
-    if ( isNumber(fontSize) && fontSize >= 0.5 ) {
-      $('body').css({ fontSize: fontSize + 'em' });
-    } else if ( fontSize ) {
-      el.val('1');
-      $('body').css({ fontSize: '1em' });  
-    }
-}
-
-$(function() {
-  
-  $('#fontSize')
-    .bind('change', function(){ setFontSize($(this)); })
-    .bind('keyup', function(e){
-      if (e.keyCode == 27) {
-        $(this).val('1');
-        $('body').css({ fontSize: '1em' });  
-      } else {
-        setFontSize($(this));
-      }
-    });
-  
-  $(window)
-    .bind('keyup', function(e){
-      if (e.keyCode == 27) {
-        $('#fontSize').val('1');
-        $('body').css({ fontSize: '1em' });  
-      }
-    });
-  
-});
 </script> 
    </head>
    <body>
 	<div class="toc">
 	<img src="https://www.europarl.europa.eu/portal/img/ep-logo.svg"/>
 	<h2>Table of Contents</h2>
-		<div id="fontSizeWrapper">
-  			<label for="fontSize">Font size</label>
-  			<input type="range" value="1" id="fontSize" step="0.5" min="0.5" max="5" />
-		</div>
-		<ul class="tree">
-			  
-			  <li>
-			    <input type="checkbox" id="c5" />
-			    <label class="tree_label" for="c5">Contents</label>
-			    <ul>
-			      <li>
-				<input type="checkbox" id="c6" />
-				<label for="c6" class="tree_label">org-ep</label>
-				<ul>
-				  <li><span class="tree_label"><a href="https://juanmatg1981.github.io/org-ep/">Documentation</a></span></li>
-				</ul>
-			      </li>
-			     </ul>
-			      <ul>
-			      <li>
-				<input type="checkbox" id="c7" />
-				<label for="c7" class="tree_label">eli-ep</label>
-				<ul>
-				  <li><span class="tree_label"><a href="https://juanmatg1981.github.io/eli-ep/">Documentation</a></span></li>
-				</ul>
-			      </li>
-			     </ul>
-			  </li>
-			</ul>
+		
+		<div id="collapseDVR3" class="panel-collapse collapse in">
+        <div class="tree ">
+            <ul>
+                <li> <span><i class="fa fa-folder-open"></i> Contents</span> 
+                    <ul>
+                        <li>	<span><i class="fa fa-minus-square"></i> org-ep</span> 
+                            <ul>
+                                <li> <span> <a href="https://juanmatg1981.github.io/org-ep/">Documentation</a> </span> </li>
+                            </ul>
+                        </li>
+                        <li>	<span><i class="fa fa-minus-square"></i> eli-ep </span>
+                            <ul>
+                                <li> <span> <a href="https://juanmatg1981.github.io/eli-ep/">Documentation</a> </span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+               
+            </ul>
+        </div>
+    </div>
 
 	 </div>
 	   <div id="content" class="container">
