@@ -1780,7 +1780,7 @@ $(function () {
  $(function () {
         $('li a').on("click", function () {
             var url = $(this).attr('href');
-            $('[id*=content]').html('<iframe frameborder="0" src="' + url + '" />');
+            $('[id*=content]').html('<iframe style="width:inherit;height:inherit" frameborder="0" src="' + url + '" />');
             return false;
         });
     });
