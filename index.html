@@ -1783,7 +1783,13 @@ $(function () {
           e.stopPropagation();
       });
   });
-
+ $(function () {
+        $('li a').on("click", function () {
+            var url = $(this).attr('href');
+            $('[id*=content]').html('<iframe frameborder="0" src="' + url + '" />');
+            return false;
+        });
+    });
 </script> 
    </head>
    <body>
